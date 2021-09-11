@@ -1,33 +1,23 @@
-import { Component, OnInit } from "@angular/core";
-import { HttpService } from "./core/services/http.service";
-import { StaticAPI } from "./shared/apiEndPoints";
+import { Component, OnInit } from '@angular/core';
+import { HttpService } from './core/services/http.service';
+import { SessionService } from './core/services/session.service';
+import { StaticAPI } from './shared/apiEndPoints';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.css"],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  title = "The Dating App";
+  title = 'The Dating App';
 
-  users: any;
-
-  constructor(private _httpService: HttpService) {}
+  constructor(private _sessionService: SessionService) {}
 
   ngOnInit(): void {
-    this.getUsers();
+    this.setCurrentUser();
   }
 
-  getUsers() {
-    this._httpService.GET_DATA(StaticAPI.getUsers.url).subscribe(
-      (res) => {
-        this.users = res;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+  setCurrentUser() {
+    this._sessionService.setCurrentUserFromStorage();
   }
-
- 
 }

@@ -10,4 +10,8 @@ export const StaticAPI = {
   login: {
     url: `${baseUrl}/account/login`,
   },
+
+  registerUser: {
+    url: `${baseUrl}/account/register`,
+  },
 };
