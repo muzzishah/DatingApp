@@ -1,4 +1,6 @@
+import { ThrowStmt } from '@angular/compiler';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { map } from 'rxjs/operators';
 import { HttpService } from '../core/services/http.service';
 import { SessionService } from '../core/services/session.service';
@@ -16,6 +18,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private _httpService: HttpService,
+    private _toastr: ToastrService,
     public _sessionService: SessionService
   ) {}
 
@@ -38,6 +41,7 @@ export class RegisterComponent implements OnInit {
         },
         (err) => {
           console.log(err);
+          this._toastr.error(err.error);
         }
       );
   }

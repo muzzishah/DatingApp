@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpService } from '../core/services/http.service';
@@ -16,16 +18,14 @@ export class NavComponent implements OnInit {
     password: '',
   };
 
-  currentUser: string = '';
-
   constructor(
     private _httpService: HttpService,
+    private _router: Router,
+    private _toastr: ToastrService,
     public _sessionService: SessionService
   ) {}
 
-  ngOnInit() {
-    this.getCurrentUser();
-  }
+  ngOnInit() {}
 
   login() {
     this._httpService
@@ -37,18 +37,19 @@ export class NavComponent implements OnInit {
           }
         })
       )
-      .subscribe();
+      .subscribe(
+        (res) => {
+          this._router.navigateByUrl('/members');
+        },
+        (err) => {
+          console.log(err);
+          this._toastr.error(err.error);
+        }
+      );
   }
 
   logout() {
     this._sessionService.removeCurrentUserFromStorage();
-  }
-
-  getCurrentUser() {
-    this._sessionService.currentUser$.subscribe((res) => {
-      if (res) {
-        this.currentUser = res.username;
-      }
-    });
+    this._router.navigateByUrl('/');
   }
 }
